@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#13213C">
+<meta name="description" content="Test de 3 minutos: descubre hacia dónde te inclinas y con qué candidatos coincides en las elecciones del 29-N.">
+<meta property="og:title" content="Tu brújula para el 29-N">
+<meta property="og:description" content="12 preguntas, 3 minutos. Con qué candidatos coincides y en qué.">
+<meta property="og:image" content="icon-512.png">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Tu brújula para el 29-N</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#13213C;--slate:#5B6B7F;--bg:#F3F5F8;--card:#fff;--line:#DCE1E8;--gold:#C79A2B;--teal:#1F6F78;--plum:#6B3A5B;--soft:#E9EDF3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Archivo,"Segoe UI",Roboto,Arial,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.cond{font-variation-settings:"wdth" 72;font-weight:850;letter-spacing:-.01em}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 60px}
+header{background:var(--ink);color:#fff}
+header .wrap{padding-bottom:22px}
+header h1{margin:0;font-size:clamp(38px,11vw,60px);line-height:.95}
+header p{margin:10px 0 0;color:#C9D2E0;font-size:15px}
+.prog{height:6px;background:#2C3D5E;border-radius:3px;margin-top:16px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--gold);transition:width .3s}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.btn{border:0;background:var(--ink);color:#fff;border-radius:10px;padding:13px 18px;font-weight:800;font-size:16px}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.prof{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+.prof button{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:12px 8px;text-align:left;font-weight:700;font-size:15px}
+.prof button span{display:block;font-size:22px}
+.prof button[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.qn{font-size:13px;color:var(--slate);font-weight:700}
+.topic{display:inline-block;font-size:12px;font-weight:800;background:var(--soft);border-radius:4px;padding:2px 8px;margin-left:6px}
+.mine{background:#F6EDD6;color:#7A5A12}
+.q{font-size:clamp(23px,6vw,30px);line-height:1.15;margin:10px 0 6px}
+.ctx{font-size:14px;color:var(--slate);margin:0 0 16px}
+.scale{display:grid;gap:8px}
+.scale button{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:12px 14px;text-align:left;font-weight:700;display:flex;align-items:center;gap:10px}
+.scale button b{width:14px;height:14px;border-radius:50%;border:2px solid var(--slate);flex:0 0 14px}
+.scale button[aria-pressed=true]{border-color:var(--ink);background:var(--soft)}
+.scale button[aria-pressed=true] b{background:var(--ink);border-color:var(--ink)}
+.imp{display:flex;align-items:center;gap:10px;margin:16px 0 4px;font-weight:700;font-size:15px;border:1px dashed var(--line);border-radius:10px;padding:10px 12px;background:var(--card);width:100%;text-align:left}
+.imp .t{width:44px;height:26px;border-radius:13px;background:var(--line);position:relative;flex:0 0 44px;transition:background .2s}
+.imp .t:after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s}
+.imp[aria-pressed=true] .t{background:var(--gold)}.imp[aria-pressed=true] .t:after{left:21px}
+.nav{display:flex;justify-content:space-between;margin-top:18px;gap:10px}
+.skip{background:none;border:0;color:var(--slate);text-decoration:underline;font-size:14px}
+h2{font-size:clamp(28px,8vw,40px);line-height:1;margin:6px 0 10px}
+h3{font-size:19px;margin:26px 0 10px}
+.axis{margin:14px 0}
+.axis .lab{display:flex;justify-content:space-between;font-size:13px;color:var(--slate);font-weight:700}
+.axis .bar{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--teal),#C9D2E0 50%,var(--plum));position:relative;margin:6px 0}
+.axis .dot{position:absolute;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:var(--ink);border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.axis p{margin:4px 0 0;font-size:14px}
+.cand{border:1px solid var(--line);background:var(--card);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.cand>button{width:100%;border:0;background:none;padding:14px;text-align:left}
+.cand .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.cand .nm{font-weight:850;font-size:18px}
+.cand .ls{font-size:13px;color:var(--slate)}
+.cand .pc{font-size:28px;font-weight:900;font-variation-settings:"wdth" 75}
+.cand .mt{height:8px;background:var(--soft);border-radius:4px;margin-top:8px;overflow:hidden}
+.cand .mt i{display:block;height:100%;background:var(--ink)}
+.cand .n{font-size:12px;color:var(--slate);margin-top:4px}
+.det{padding:0 14px 14px;font-size:14px}
+.det li{margin-bottom:6px}
+.ok{color:#1E7A55;font-weight:800}.ko{color:#A3152D;font-weight:800}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border-radius:12px;overflow:hidden}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:center}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.tbl thead th{font-size:11px;background:var(--soft)}
+.chip{display:inline-block;min-width:28px;border-radius:4px;padding:2px 4px;font-weight:800}
+.note{font-size:13px;color:var(--slate);background:var(--card);border:1px dashed var(--line);border-radius:10px;padding:12px;margin-top:16px}
+.scroll{overflow-x:auto}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1 class="cond">Tu brújula<br>para el 29-N</h1>
+  <p>12 preguntas, unos 3 minutos. Te dice hacia dónde te inclinas y con qué candidatos coincides más, explicando en qué. La decisión siempre es tuya.</p>
+  <div class="prog" aria-hidden="true"><i id="pg"></i></div>
+</div></header>
+
+<main class="wrap">
+  <section id="s-intro">
+    <div class="card">
+      <h2 class="cond">Antes de empezar</h2>
+      <p style="margin-top:0">Si quieres, dinos a qué te dedicas. No cambia el resultado: solo marcamos las preguntas que suelen afectar más a gente como tú, para que decidas si te importan especialmente.</p>
+      <div class="prof" id="prof"></div>
+      <p style="margin:14px 0 0">¿En qué comunidad votas? Así te enseñamos solo las candidaturas de tu papeleta.</p>
+      <div class="prof" id="regs"></div>
+      <div class="row"><button class="btn" id="start">Empezar el test</button></div>
+    </div>
+    <div class="note">Las posturas de cada candidato salen de sus programas de 2023, ponencias de partido, votaciones en el Congreso y declaraciones de la precampaña. A 6 de noviembre ningún partido había publicado su programa para el 29-N. Donde un candidato no tiene postura clara, no se cuenta. Están las seis candidaturas estatales y las autonómicas con presencia en el Congreso o en todas las provincias de su comunidad: ERC y Junts (Cataluña), PNV y EH Bildu (País Vasco; Bildu también en Navarra), BNG (Galicia), Coalición Canaria y Adelante Andalucía. Para las autonómicas hay menos datos, porque solo constan sus votaciones en el Congreso y sus programas de 2023. Listas pequeñas como Geroa Bai, Soria ¡Ya! o Coalición Existe no están incluidas.</div>
+  </section>
+
+  <section id="s-q" hidden>
+    <div class="card">
+      <div class="qn" id="qn"></div>
+      <div class="q cond" id="qt"></div>
+      <p class="ctx" id="qc"></p>
+      <div class="scale" id="scale"></div>
+      <button class="imp" id="imp" aria-pressed="false"><span class="t"></span>Este tema me importa especialmente</button>
+      <div class="nav">
+        <button class="btn ghost" id="back">Atrás</button>
+        <button class="skip" id="skipq">No lo tengo claro</button>
+        <button class="btn" id="next" disabled>Siguiente</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="s-res" hidden>
+    <h2 class="cond">Tu resultado</h2>
+    <div class="card" id="axes"></div>
+    <h3>Con quién coincides más</h3>
+    <p class="ctx" style="margin-top:-4px">Porcentaje de coincidencia en las preguntas donde hay postura conocida. Los temas que marcaste como importantes cuentan el doble. Toca un candidato para ver en qué coincidís y en qué no.</p>
+    <div id="cands"></div>
+    <h3>Pregunta a pregunta</h3>
+    <div class="scroll"><table class="tbl" id="tbl"></table></div>
+    <div class="note" id="pens"></div>
+    <div class="note">Esto no es una recomendación de voto. Es una comparación entre tus respuestas y lo que han dicho o votado los candidatos. Hay temas que no entran (corrupción, gestión, liderazgo, confianza) y que también pesan. Contrasta con los programas oficiales cuando se publiquen.</div>
+    <div class="row" style="margin-top:16px"><button class="btn" id="again">Repetir el test</button><button class="btn ghost" id="share">Compartir el test</button></div>
+    <p class="ctx" style="margin-top:20px;font-size:12px">Fuentes: Afinidad Política (posiciones documentadas de PP, PSOE, Vox y SALF), DatosClaros y Politicheck (comparadores de programas), Diario de Sesiones del Congreso (votaciones de jornada y amnistía), El Debate (diez propuestas de Vox, 24/10/2026), La 7 TV (propuestas de Feijóo, 24/10/2026), El Español (propuestas de Colau, 24/10/2026), Demócrata (propuestas de Irene Montero). Elaboración propia, noviembre de 2026.</p>
+  </section>
+</main>
+
+<script>
+// Escala: 2 muy de acuerdo, 1 de acuerdo, 0 neutral, -1 en desacuerdo, -2 muy en desacuerdo. null = sin postura clara.
+const C=[
+ {id:"fei",nm:"Alberto Núñez Feijóo",ls:"Lista del PP",r:"all",camp:"Bajar el IRPF a rentas medias, familias y jóvenes; que los autónomos que facturan menos de 85.000 € no paguen IRPF; un millón de viviendas; desalojo de okupas en 48 horas; nueva financiación autonómica; aprobar Presupuestos cada año; ningún indulto por corrupción."},
+ {id:"san",nm:"Pedro Sánchez",ls:"Lista del PSOE",r:"all",camp:"Vivienda como eje: línea TU CASA con préstamos de 50.000 € sin intereses para la primera vivienda (10.000 millones); recuperar el escudo antidesahucios y los decretos de vivienda que cayeron; jornada de 37,5 horas; frenar a PP y Vox, a los que presenta como parte de una ultraderecha internacional."},
+ {id:"aba",nm:"Santiago Abascal",ls:"Lista de Vox",r:"all",camp:"Prioridad nacional en ayudas y vivienda; remigración; IRPF del 15% hasta 70.000 € con 22.000 € exentos; IVA general al 18% y reducido al 8%; sin cuota de autónomos para quien gane menos del SMI; mantener las nucleares; Plan Nacional del Agua; quitar subvenciones a partidos, sindicatos y patronales."},
+ {id:"col",nm:"Ada Colau",ls:"Lista de Frente Amplio (Sumar, Más Madrid, IU y Comuns)",r:"all",camp:"Que ninguna pensión baje del SMI; jubilación efectiva a los 65; 2% a patrimonios de más de 1 millón y tipo mínimo a grandes empresas; destopar cotizaciones; 1% del PIB al año en vivienda pública; contratos de alquiler indefinidos."},
+ {id:"mon",nm:"Irene Montero",ls:"Lista de Podemos",r:"all",camp:"'Paz, casa, trabajo': SMI de 1.800 €; jubilación a los 63 años y subir pensiones mínimas y no contributivas; bajar los alquileres por ley; nueva reducción de jornada; no aumentar el gasto militar."},
+ {id:"alv",nm:"Alvise Pérez",ls:"Lista de Se Acabó La Fiesta",r:"all",note:"No se presenta en Vizcaya, Guipúzcoa, Cantabria, Ciudad Real, Girona ni Lleida.",camp:"Bajar impuestos, mano dura en seguridad y prisión permanente revisable, más deportaciones, Estado más centralizado y un referéndum sobre la permanencia en la UE."},
+ {id:"ruf",nm:"Gabriel Rufián",ls:"Lista de ERC",r:"cat",camp:"Más progresividad fiscal e impuestos a banca y energéticas; SMI de 1.250 €; que las comunidades regulen los alquileres; derogar la Ley de Extranjería; referéndum pactado."},
+ {id:"nog",nm:"Míriam Nogueras",ls:"Lista de Junts",r:"cat",camp:"Ajustar todos los impuestos a la inflación; sociedades al 20% para pymes; que Cataluña fije su SMI, decida sobre inmigración y tenga su propia Agencia Tributaria."},
+ {id:"vaq",nm:"Maribel Vaquero",ls:"Lista del PNV",r:"pv",camp:"Impuestos más progresivos sin cifras; vivienda pública y de alquiler; política migratoria europea común y reparto de menores no acompañados."},
+ {id:"mat",nm:"Oskar Matute",ls:"Lista de EH Bildu",r:"pv,nav",camp:"Jornada de 32 horas sin bajar sueldo; SMI propio para Euskadi; prórroga automática de alquileres; derogar la Ley de Extranjería; derecho a decidir."},
+ {id:"reg",nm:"Néstor Rego",ls:"Lista del BNG",r:"gal",camp:"Defensa de las competencias gallegas; votó a favor de la amnistía, la jornada de 37,5 horas y el escudo antidesahucios."},
+ {id:"val",nm:"Cristina Valido",ls:"Lista de Coalición Canaria (Mesa de Unidad Canaria)",r:"can",camp:"Agenda canaria; votó a favor de la jornada de 37,5 horas y del escudo antidesahucios, y en contra de la amnistía."},
+ {id:"ada",nm:"Adelante Andalucía",ls:"En Cádiz encabeza María Sánchez",r:"and",camp:"Se presenta en las ocho provincias andaluzas. Su programa para el 29-N aún se está elaborando con aportaciones ciudadanas, así que no hay posturas documentadas para comparar."}
+];
+const REG=[["all","Otra comunidad"],["and","Andalucía"],["cat","Cataluña"],["pv","País Vasco"],["nav","Navarra"],["gal","Galicia"],["can","Canarias"]];
+// Posturas de candidaturas autonómicas: votaciones en el Congreso y programas de 2023. null = sin postura clara.
+const RP={ruf:[-2,2,2,2,1,null,2,-2,-2,null,2,2],nog:[1,null,1,-2,null,null,-1,null,null,null,2,null],vaq:[-1,null,null,1,null,null,2,null,null,null,2,null],
+ mat:[-2,2,2,2,2,-1,2,-2,-2,-2,2,2],reg:[null,null,null,2,null,null,2,null,null,null,2,null],val:[null,null,null,1,null,null,2,null,null,null,-2,null],ada:Array(12).fill(null)};
+const Q=[
+ {t:"Impuestos",q:"Hay que bajar impuestos aunque eso suponga menos servicios públicos.",c:"Por ejemplo: menos IRPF a cambio de menos gasto del Estado.",ax:"eco",dir:1,
+  p:{fei:1,san:-2,aba:2,col:-2,mon:-2,alv:2},
+  w:{fei:"Bajar IRPF a rentas medias y familias; aplicar a la gestión el modelo gallego.",san:"En contra de bajar impuestos si hay menos servicios.",aba:"Rebaja 'drástica': IRPF del 15% hasta 70.000 € y exento hasta 22.000 €.",col:"Más impuestos a grandes patrimonios para financiar pensiones.",mon:"Que el coste no recaiga en trabajadores y familias.",alv:"Bajar impuestos aunque haya menos servicios."}},
+ {t:"Impuestos",q:"Las grandes fortunas y las grandes empresas deben pagar más impuestos.",c:"Impuestos al patrimonio, a la banca o un mínimo para grandes empresas.",ax:"eco",dir:-1,
+  p:{fei:-2,san:2,aba:-2,col:2,mon:2,alv:-2},
+  w:{fei:"Eliminar el impuesto a las grandes fortunas.",san:"A favor de que paguen más grandes empresas, fortunas y herencias.",aba:"Suprimir patrimonio y sucesiones; sociedades del 25% al 15%.",col:"2% a patrimonios de más de 1 millón y tipo mínimo a grandes empresas.",mon:"Posición histórica de Podemos a favor.",alv:"En contra de gravar grandes fortunas, empresas y herencias."}},
+ {t:"Trabajo",q:"El salario mínimo debe seguir subiendo cada año.",c:"Hoy está en 1.221 € en 14 pagas.",ax:"eco",dir:-1,
+  p:{fei:-1,san:2,aba:0,col:1,mon:2,alv:null},
+  w:{fei:"No subirlo más por decreto; pactarlo en el diálogo social y priorizar el salario medio.",san:"Subirlo siempre y blindar que supere el 60% del salario medio.",aba:"Intermedia: compensar las subidas con bonificaciones a las empresas.",col:"Subidas por encima del IPC; pensiones al nivel del SMI.",mon:"Subirlo hasta 1.800 €.",alv:null}},
+ {t:"Trabajo",q:"La jornada laboral debe reducirse por ley sin bajar el sueldo.",c:"La ley de 37,5 horas cayó en el Congreso en septiembre de 2025.",ax:"eco",dir:-1,
+  p:{fei:-2,san:2,aba:-2,col:2,mon:2,alv:null},
+  w:{fei:"Votó para tumbarla; prefiere que se pacte en los convenios.",san:"A favor de 37,5 horas por ley.",aba:"Votó para tumbarla.",col:"37,5 horas por ley y camino hacia 32.",mon:"Nueva reducción sin perder sueldo.",alv:null}},
+ {t:"Vivienda",q:"El Estado debe limitar por ley el precio del alquiler.",c:"Topes en zonas tensionadas, como ya se hace en Cataluña.",ax:"eco",dir:-1,
+  p:{fei:-2,san:1,aba:-2,col:2,mon:2,alv:-2},
+  w:{fei:"Derogar la ley de vivienda y construir un millón de viviendas.",san:"Limitar alquileres en zonas tensionadas.",aba:"Derogar el control de rentas; más suelo y menos impuestos a la compra.",col:"Contratos indefinidos y 1% del PIB al año en vivienda pública.",mon:"Bajar los alquileres por ley.",alv:"En contra de limitarlos."}},
+ {t:"Vivienda",q:"Hay que poder desalojar a los okupas en 24 o 48 horas y endurecer las penas.",c:"",ax:"ord",dir:1,
+  p:{fei:2,san:0,aba:2,col:null,mon:null,alv:2},
+  w:{fei:"Ley antiokupación con desalojo en 48 horas.",san:"Intermedia: agilizar desalojos, pero la ley ya da herramientas.",aba:"Tolerancia cero.",col:null,mon:null,alv:"Penas más duras."}},
+ {t:"Vivienda",q:"No se debe desahuciar a familias vulnerables si no tienen otra vivienda.",c:"El decreto que lo prohibía cayó en octubre de 2026.",ax:"eco",dir:-1,
+  p:{fei:-1,san:2,aba:-2,col:2,mon:2,alv:null},
+  w:{fei:"Votó contra el decreto.",san:"A favor; lo aprobó el Gobierno.",aba:"En contra; votó contra las prórrogas.",col:"Sumar votó a favor del decreto.",mon:"Prohibir desahucios sin alternativa habitacional.",alv:null}},
+ {t:"Inmigración",q:"Debe haber más deportaciones de inmigrantes en situación irregular.",c:"",ax:"ord",dir:1,
+  p:{fei:1,san:-1,aba:2,col:-2,mon:-2,alv:2},
+  w:{fei:"Más deportaciones y una inmigración legal y cualificada.",san:"En contra de más deportaciones; migración regular y ordenada.",aba:"'Remigración': repatriar y deportar.",col:"Regularización permanente y cierre de los CIE.",mon:"Posición histórica de Podemos en contra.",alv:"A favor de más deportaciones."}},
+ {t:"Inmigración",q:"Los españoles deben tener prioridad en ayudas sociales y vivienda pública.",c:"Lo que Vox llama 'prioridad nacional'.",ax:"ord",dir:1,
+  p:{fei:0,san:-2,aba:2,col:-2,mon:-2,alv:1},
+  w:{fei:"Intermedia: ayudas condicionadas a cotizar o buscar empleo.",san:"Igualdad de derechos para quien tiene papeles.",aba:"Prioridad nacional en ayudas, guarderías y vivienda.",col:"En contra.",mon:"En contra.",alv:"Contra igualar las ayudas de inmigrantes regularizados."}},
+ {t:"Energía",q:"Las centrales nucleares deben seguir abiertas más allá del calendario de cierre.",c:"El cierre está previsto entre 2027 y 2035.",ax:"eco",dir:1,
+  p:{fei:2,san:-1,aba:2,col:-2,mon:-2,alv:2},
+  w:{fei:"Muy a favor de alargar su vida.",san:"En contra, salvo Almaraz hasta 2030.",aba:"Recuperar el plan nuclear.",col:"Cierre nuclear y 90% renovable en 2030.",mon:"A favor del cierre (programa conjunto de 2023).",alv:"Mantenerlas."}},
+ {t:"Territorio",q:"Fue acertado aprobar la ley de amnistía.",c:"Aprobada en 2024 y avalada por el TC y el TJUE.",ax:"ord",dir:-1,
+  p:{fei:-2,san:2,aba:-2,col:2,mon:2,alv:-2},
+  w:{fei:"Votó en contra.",san:"La impulsó.",aba:"Votó en contra.",col:"Sumar votó a favor.",mon:"Podemos votó a favor.",alv:"Defiende un Estado más centralizado y rechaza el derecho a decidir."}},
+ {t:"Sociedad",q:"El aborto debe estar garantizado como un derecho.",c:"",ax:"ord",dir:-1,
+  p:{fei:0,san:2,aba:-2,col:2,mon:2,alv:-2},
+  w:{fei:"Intermedia: no derogar la ley, pero con permiso paterno para menores.",san:"Blindarlo en la Constitución.",aba:"Derogar la ley.",col:"A favor.",mon:"A favor; impulsó la reforma de 2023.",alv:"En contra del aborto como derecho."}}
+];
+Q.forEach((q,j)=>{for(const k in RP){q.p[k]=RP[k][j];q.w[k]=q.w[k]||null}});
+const P=[
+ {id:"pub",e:"🏛️",n:"Empleado público",r:[0,1]},
+ {id:"aut",e:"🧾",n:"Autónomo o empresario",r:[0,1,2,3]},
+ {id:"asa",e:"👷",n:"Asalariado en una empresa",r:[2,3,4]},
+ {id:"pen",e:"👴",n:"Pensionista",r:[0,1]},
+ {id:"jov",e:"🎓",n:"Estudiante o joven",r:[2,4,6]},
+ {id:"par",e:"🔎",n:"Buscando empleo",r:[2,3,6]}
+];
+const OL=v=>(OPT.find(o=>o[0]===v)||[0,"?"])[1].toLowerCase();
+const OPT=[[2,"Muy de acuerdo"],[1,"De acuerdo"],[0,"Ni a favor ni en contra"],[-1,"En desacuerdo"],[-2,"Muy en desacuerdo"]];
+const $=s=>document.querySelector(s);
+let prof=null,i=0,A=Array(Q.length).fill(undefined),W=Array(Q.length).fill(1);
+
+$("#prof").innerHTML=P.map(p=>`<button data-id="${p.id}" aria-pressed="false"><span>${p.e}</span>${p.n}</button>`).join("");
+$("#prof").onclick=e=>{const b=e.target.closest("button");if(!b)return;prof=prof===b.dataset.id?null:b.dataset.id;
+  document.querySelectorAll("#prof button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.id===prof));};
+let reg="and";
+$("#regs").innerHTML=REG.map(r=>`<button data-id="${r[0]}" aria-pressed="${r[0]===reg}">${r[1]}</button>`).join("");
+$("#regs").onclick=e=>{const b=e.target.closest("button");if(!b)return;reg=b.dataset.id;document.querySelectorAll("#regs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.id===reg))};
+const inReg=c=>c.r==="all"||c.r.split(",").includes(reg);
+const mine=k=>prof&&P.find(p=>p.id===prof).r.includes(k);
+
+function show(id){["intro","q","res"].forEach(x=>$("#s-"+x).hidden=x!==id);window.scrollTo({top:0})}
+function draw(){
+  const q=Q[i];$("#pg").style.width=(i/Q.length*100)+"%";
+  $("#qn").innerHTML=`Pregunta ${i+1} de ${Q.length}<span class="topic">${q.t}</span>${mine(i)?'<span class="topic mine">Suele afectarte</span>':""}`;
+  $("#qt").textContent=q.q;$("#qc").textContent=q.c;$("#qc").hidden=!q.c;
+  $("#scale").innerHTML=OPT.map(o=>`<button data-v="${o[0]}" aria-pressed="${A[i]===o[0]}"><b></b>${o[1]}</button>`).join("");
+  $("#imp").setAttribute("aria-pressed",W[i]===2);
+  $("#next").disabled=A[i]===undefined;$("#back").style.visibility=i?"visible":"hidden";
+  $("#next").textContent=i===Q.length-1?"Ver resultado":"Siguiente";
+}
+$("#start").onclick=()=>{show("q");draw()};
+$("#scale").onclick=e=>{const b=e.target.closest("button");if(!b)return;A[i]=+b.dataset.v;draw();};
+$("#imp").onclick=()=>{W[i]=W[i]===2?1:2;draw()};
+$("#back").onclick=()=>{if(i>0){i--;draw()}};
+function go(){if(i<Q.length-1){i++;draw()}else results()}
+$("#next").onclick=go;
+$("#skipq").onclick=()=>{A[i]=null;go()};
+
+function results(){
+  $("#pg").style.width="100%";show("res");
+  // Ejes
+  const axis=k=>{let s=0,n=0;Q.forEach((q,j)=>{if(q.ax===k&&A[j]!=null){s+=A[j]*q.dir*W[j];n+=2*W[j]}});return n?s/n:0};
+  const eco=axis("eco"),ord=axis("ord");
+  const txt=(v,a,b)=>Math.abs(v)<.2?"Te quedas en una posición de centro.":(v<0?`Te inclinas hacia ${a}`:`Te inclinas hacia ${b}`)+(Math.abs(v)>.6?", con claridad.":", de forma moderada.");
+  $("#axes").innerHTML=`
+   <div class="axis"><div class="lab"><span>Más Estado</span><b>Economía</b><span>Más mercado</span></div><div class="bar"><span class="dot" style="left:${50+eco*50}%"></span></div><p>${txt(eco,"más intervención pública: impuestos a los que más tienen, regular precios y salarios","menos impuestos y menos regulación")}</p></div>
+   <div class="axis"><div class="lab"><span>Más abierto</span><b>Sociedad y territorio</b><span>Más orden</span></div><div class="bar"><span class="dot" style="left:${50+ord*50}%"></span></div><p>${txt(ord,"posiciones más abiertas en inmigración, derechos y modelo territorial","más control de la inmigración, más mano dura y un Estado más unido")}</p></div>`;
+  // Afinidad
+  const res=C.filter(inReg).map(c=>{let s=0,n=0,yes=[],no=[];Q.forEach((q,j)=>{const a=A[j],p=q.p[c.id];if(a==null||p==null)return;
+    const ag=1-Math.abs(a-p)/4;s+=ag*W[j];n+=W[j];(ag>=.75?yes:ag<=.25?no:null)?.push(j)});
+    return {...c,pc:n?Math.round(s/n*100):null,n:Q.filter((q,j)=>A[j]!=null&&q.p[c.id]!=null).length,yes,no}}).sort((a,b)=>(b.pc??-1)-(a.pc??-1));
+  $("#cands").innerHTML=res.map(r=>`<div class="cand"><button aria-expanded="false"><div class="top"><div><div class="nm">${r.nm}</div><div class="ls">${r.ls}</div></div><div class="pc">${r.pc==null?"–":r.pc+"%"}</div></div>
+   <div class="mt"><i style="width:${r.pc||0}%"></i></div><div class="n">Comparado en ${r.n} de ${Q.length} preguntas${r.r!=="all"?" · Solo se presenta en su comunidad":""}${r.n&&r.n<5?". Pocos datos: tómalo con cautela":""}</div></button>
+   <div class="det" hidden>${r.yes.length?`<p class="ok">Coincidís en</p><ul>${r.yes.map(j=>`<li>${Q[j].q}<br><small>Tú: <b>${OL(A[j])}</b>. Su postura: <b>${OL(Q[j].p[r.id])}</b>.</small>${Q[j].w[r.id]?` <i>${Q[j].w[r.id]}</i>`:""}</li>`).join("")}</ul>`:""}${r.no.length?`<p class="ko">No coincidís en</p><ul>${r.no.map(j=>`<li>${Q[j].q}<br><small>Tú: <b>${OL(A[j])}</b>. Su postura: <b>${OL(Q[j].p[r.id])}</b>.</small>${Q[j].w[r.id]?` <i>${Q[j].w[r.id]}</i>`:""}</li>`).join("")}</ul>`:""}${!r.yes.length&&!r.no.length?"<p>Sin coincidencias ni choques claros.</p>":""}<p><b>Propuestas de su campaña:</b> ${r.camp}</p>${r.note?`<p><i>${r.note}</i></p>`:""}</div></div>`).join("");
+  document.querySelectorAll(".cand>button").forEach(b=>b.onclick=()=>{const d=b.nextElementSibling;d.hidden=!d.hidden;b.setAttribute("aria-expanded",!d.hidden)});
+  // Tabla
+  const CR=C.filter(inReg);const lbl=v=>v==null?'<span class="chip" style="color:#9AA6B6">?</span>':`<span class="chip" style="background:${v>0?"#DCEFE6":v<0?"#F9E1E5":"#E9EDF3"}">${v>0?"Sí":v<0?"No":"="}</span>`;
+  $("#tbl").innerHTML=`<thead><tr><th>Tema</th><th>Tú</th>${CR.map(c=>`<th>${c.id==="ada"?"Adelante":c.nm.split(" ").slice(-1)[0]}</th>`).join("")}</tr></thead><tbody>${Q.map((q,j)=>`<tr><td>${q.t}: ${q.q.slice(0,46)}${q.q.length>46?"…":""}</td><td>${lbl(A[j])}</td>${CR.map(c=>`<td>${lbl(q.p[c.id])}</td>`).join("")}</tr>`).join("")}</tbody>`;
+  $("#pens").innerHTML="Sobre pensiones: los grandes partidos defienden subirlas con el IPC, así que en eso no se distinguen. Las diferencias están en cómo pagarlas. Colau propone que ninguna pensión baje del SMI con impuestos a grandes patrimonios; Montero, bajar la jubilación a los 63 años; Vox y PP, más planes privados con ventajas fiscales; el PSOE, blindar la subida con el IPC en la Constitución."+(prof==="pub"?"<br><br>Para empleados públicos: ninguno de los comparadores recoge una postura clara de los partidos sobre Muface o los sueldos públicos para el 29-N.":"");
+}
+$("#again").onclick=()=>{i=0;A=Array(Q.length).fill(undefined);W=Array(Q.length).fill(1);show("intro");$("#pg").style.width="0"};
+$("#share").onclick=async()=>{const t="Tu brújula para el 29-N: un test de 3 minutos para ver con qué candidatos coincides.";
+  try{if(navigator.share){await navigator.share({title:"Tu brújula para el 29-N",text:t,url:location.protocol.startsWith("http")?location.href.split("#")[0]:undefined});return}}catch(e){}
+  try{await navigator.clipboard.writeText(t);$("#share").textContent="Texto copiado"}catch(e){}};
+</script>
+<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});</script>
+</body>
+</html>
